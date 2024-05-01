@@ -45,7 +45,7 @@ async function init() {
             post.pk = $pk, 
             post.id = $id, 
             post.caption = $caption, 
-            post.taken_at = TIMESTAMP($taken_at), 
+       
             post.image_versions2 = $image_versions2, 
             post.owner = $owner, 
             post.top_likers = $top_likers, 
@@ -62,7 +62,7 @@ async function init() {
             pk: '1111111111111111111',
             id: '1111111111111111111_1111111111',
             caption: '{"text":"aaaaaa"}',
-            taken_at: '2020-01-20T20:11:55.649Z',
+            // taken_at: '2020-01-20T20:11:55.649Z',
             image_versions2: '{"candidates":[{"url":"111111111_11111111111111111_111111111111111111_n.jpg","height":1080,"width":1080}]}',
             owner: '{"pk":"1111111111"}',
             top_likers: '[]',
