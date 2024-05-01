@@ -1,11 +1,14 @@
 const kuzu = require("kuzu");
-const db = new kuzu.Database("/home/ashfaq/.config/Electron/graphwise/kuzu");
+const db = new kuzu.Database("./db");
 const connection = new kuzu.Connection(db);
 
 async function init() {
+
+    const table_name = "NewTable";
     try {
+
         await connection.query(
-            `CREATE NODE TABLE InstaPost(
+            `CREATE NODE TABLE ${table_name}(
                     code STRING,
                     pk STRING,
                     id STRING,
@@ -36,9 +39,9 @@ async function init() {
     }
 
 
-    const prepared = await connection.prepare(`MERGE (post:InstaPost {
-            code : $code
-        }) SET 
+    const prepared = await connection.prepare(`MERGE (post:${table_name} {
+                code : $code
+            }) SET post.code = $code, 
             post.pk = $pk, 
             post.id = $id, 
             post.caption = $caption, 
@@ -53,22 +56,30 @@ async function init() {
             post.carousel_media = $carousel_media RETURN post;`
     );
 
-    const result = await connection.execute(prepared, {
-        code: 'A6Ta2AAAA_a',
-        pk: '1111111111111111111',
-        id: '3111111111111111111_1111111111',
-        caption: '{"text":"asfsef"}',
-        taken_at: '2020-01-20T20:11:55.649Z',
-        image_versions2: '{"candidates":[]}',
-        owner: '{"pk":"1111111111"}',
-        top_likers: '[]',
-        facepile_top_likers: '[]',
-        like_count: 195,
-        product_type: 'carousel_container',
-        media_type: 8,
-        carousel_media: '["3111111111111111111_1111111111","3111111111111111111_1111111111"]'
-    })
-    console.log(result);
+    try {
+        const result = await connection.execute(prepared, {
+            code: 'C6Tx2URJX_j',
+            pk: '1111111111111111111',
+            id: '1111111111111111111_1111111111',
+            caption: '{"text":"awdwad"}',
+            taken_at: '1970-01-20T20:11:55.649Z',
+            image_versions2: '{"candidates":[{"url":"111111111_11111111111111111_111111111111111111_n.jpg","height":1080,"width":1080}]}',
+            owner: '{"pk":"1111111111"}',
+            top_likers: '[]',
+            facepile_top_likers: '[]',
+            like_count: 198,
+            product_type: 'carousel_container',
+            media_type: 8,
+            carousel_media: '["1111111111111111111_1111111111"]'
+        })
+        const all = await result.getAll();
+        console.log(all);
+    } catch (error) {
+        console.log(error);
+    }
+
+    await connection.query(`DROP TABLE ${table_name}`);
+
 }
 
 init()
